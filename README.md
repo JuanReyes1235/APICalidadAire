@@ -22,29 +22,67 @@ Permite registrar lecturas, generar alertas automáticas y consultar informació
 - MySQL 8.4.
 - Visual Studio 2026 o editor compatible.
 
+
 ## Configuración
 
-1. Clonar el repositorio.
-2. Iniciar el contenedor MySQL.
-3. Configurar la cadena de conexión en appsettings.json.
-4. Configurar los parámetros JWT.
-5. Restaurar los paquetes NuGet.
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/JuanReyes1235/APICalidadAire.git
+```
+
+### 2. Iniciar MySQL
+
+Iniciar un contenedor MySQL 8.4 mediante Docker Desktop y verificar que el puerto 3306 esté disponible.
+
+### 3. Configurar User Secrets
+
+Desde la carpeta del proyecto, ejecutar:
+
+```bash
+dotnet user-secrets init
+```
+
+Configurar la conexión a MySQL:
+
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Port=3306;Database=CalidadAireDB;User=root;Password=TU_CONTRASEÑA;"
+```
+
+Configurar los parámetros JWT:
+
+```bash
+dotnet user-secrets set "Jwt:Key" "TU_CLAVE_SECRETA"
+dotnet user-secrets set "Jwt:Issuer" "APICalidadAire"
+dotnet user-secrets set "Jwt:Audience" "APICalidadAireUsuarios"
+dotnet user-secrets set "Jwt:AccessTokenMinutes" "60"
+```
+
+No publicar las credenciales reales.
+
+### 4. Restaurar paquetes
 
 ```bash
 dotnet restore
 ```
 
-6. Crear la base de datos mediante migraciones:
+### 5. Crear las tablas
 
 ```bash
 dotnet ef database update
 ```
 
-7. Ejecutar el proyecto:
+### 6. Ejecutar la API
 
 ```bash
 dotnet run
 ```
+
+Swagger estará disponible en la dirección HTTPS indicada por la aplicación, agregando `/swagger`.
+
+### 7. Script SQL
+
+El script de creación de tablas y relaciones se encuentra en la carpeta `SQL`.
 
 ## Endpoints principales
 
