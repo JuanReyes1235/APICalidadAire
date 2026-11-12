@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS CalidadAireDB;
+
+USE CalidadAireDB;
+
+CREATE TABLE IF NOT EXISTS SensoresCalidadAire (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Ubicacion VARCHAR(150) NOT NULL,
+    TipoGas VARCHAR(50) NOT NULL,
+    Estado VARCHAR(30) NOT NULL DEFAULT 'Activo',
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE IF NOT EXISTS LecturasAire (
+    Id INT NOT NULL AUTO_INCREMENT,
+    SensorId INT NOT NULL,
+    PM2_5 DECIMAL(10,2) NOT NULL,
+    PM10 DECIMAL(10,2) NOT NULL,
+    CO2 DECIMAL(10,2) NOT NULL,
+    FechaHora DATETIME(6) NOT NULL,
+    PRIMARY KEY (Id),
+    CONSTRAINT FK_Lecturas_Sensores
+        FOREIGN KEY (SensorId)
+        REFERENCES SensoresCalidadAire(Id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS AlertasAire (
+    Id INT NOT NULL AUTO_INCREMENT,
+    SensorId INT NOT NULL,
+    Nivel VARCHAR(20) NOT NULL,
+    Mensaje VARCHAR(500) NOT NULL,
+    FechaHora DATETIME(6) NOT NULL,
+    PRIMARY KEY (Id),
+    CONSTRAINT FK_Alertas_Sensores
+        FOREIGN KEY (SensorId)
+        REFERENCES SensoresCalidadAire(Id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS Usuarios (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL,
+    PasswordHash LONGTEXT NOT NULL,
+    FechaRegistro DATETIME(6) NOT NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY IX_Usuarios_Email (Email)
+);
